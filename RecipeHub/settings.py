@@ -6,7 +6,7 @@ TEMP_DIR = os.path.join(BASE_DIR, 'templates')
 
 SECRET_KEY = 'django-insecure-eh^3e&ct(*6kl#qvh_!aj+0r-)vp@%1)eyla3hf=batjwo91)('
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['recipehub-oe89.onrender.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
