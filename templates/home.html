@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="height: 50vh;">
+    <div class="text-center">
+        <h1>Welcome to RecipeHub</h1>
+        <p>Your one-stop destination to organize and explore recipes.</p>
+        <p>Not sure what to cook? Let us inspire you!</p>
+        <a href="{% url 'register' %}" class="btn btn-primary">Get Started</a>
+    </div>
+</div>
+{% endblock %}

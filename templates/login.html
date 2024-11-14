@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="height: 80vh;">
+    <div class="card shadow-lg" style="width: 100%; max-width: 400px; border-radius: 15px;">
+        <div class="card-header text-center" style="background-color: #aa6ceb; color: white; border-radius: 15px 15px 0 0;">
+            <h4>Login</h4>
+        </div>
+        <div class="card-body" style="background-color: #f2f9ff;">
+            <!-- Display error messages if any -->
+            {% if messages %}
+                <div class="alert alert-danger">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <!-- Login form -->
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="form-group mb-3">
+                    <label for="username">Username or Email</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter username or email" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                </div>
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary w-100" style="background-color: #aa6ceb; border-color: #4a90e2;">Login</button>
+            </form>
+        </div>
+        <div class="card-footer text-center">
+            <p>Don't have an account? <a href="{% url 'register' %}" class="text-primary">Register here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

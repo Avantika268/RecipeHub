@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Update Recipe - RecipeHub{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Back Button -->
+    <div class="mb-4" style="position: relative; left: 100px; top: -20px;">
+        <a href="{% url 'recipe_detail' recipe_id=recipe.id %}" class="btn" style="background-color: white; width: 150px; color: black;">Back</a>
+
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <h2 class="text-center mb-4" style="position: relative; top: -45px;">Update Recipe</h2>
+            <form method="POST" enctype="multipart/form-data" class="shadow p-4 rounded bg-light" style="position: relative; top: -45px;">
+                {% csrf_token %}
+                
+                <div class="form-group mb-3" >
+                    {{ form.as_p }}
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block mt-3">Update Recipe</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom Styling for Update Recipe Form */
+    .container {
+        max-width: 2000px;
+    }
+
+    h2 {
+        font-family: 'Arial', sans-serif;
+        font-weight: 700;
+        color: white;
+    }
+
+    form {
+        background-color: #e0f7fa;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    .btn {
+        background-color: #007bff;
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 12px 20px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    .mb-3 {
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}

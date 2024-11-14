@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Recipes - RecipeHub{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Back Button -->
+    <div class="mb-4" style="position: relative; left: -100px; top: -20px;">
+        <a href="{% url 'main' %}" class="btn" style="background-color: gray; width: 150px; color: black;">Back</a>
+    </div>
+
+    <h2 class="text-center mb-4" style="position: relative; top: -50px;">My Recipes</h2>
+
+    <div class="row">
+        {% if no_results %}
+            <!-- Show "No such recipe found" message if no_results is true -->
+            <div class="col-12 d-flex flex-column justify-content-center align-items-center" style="height: 50vh;">
+                <p style="font-size: 2rem; font-weight: bold; color: white; text-align: center;">
+                    No such recipe found. Try searching again!
+                </p>
+                <a href="{% url 'create_recipe' %}" class="btn btn-primary mt-3" style="width: 200px;">Create Recipe</a>
+            </div>
+        {% else %}
+            {% for recipe in recipes %}
+            <div class="col-md-4 mb-4" style="position: relative; top: -50px;" >
+                <div class="card" style="height: 100%; display: flex; flex-direction: column;">
+
+                    {% if recipe.recipe_image %}
+                        <img src="{{ recipe.recipe_image.url }}" class="card-img-top" alt="Recipe Image" style="max-height: 200px; object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'images/placeholder.jpg' %}" class="card-img-top" alt="No Image Available" style="max-height: 200px; object-fit: cover;">
+                    {% endif %}
+
+                    <div class="card-body" style="flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h5 class="card-title">{{ recipe.title }}</h5>
+                            <p class="card-text">{{ recipe.description }}</p>
+                        </div>
+
+                        <div class="recipe-actions" >
+                            <a href="{% url 'recipe_detail' recipe_id=recipe.id %}?from=my_recipes" class="btn btn-primary btn-view-recipe">View Recipe</a>
+
+                            <button id="shareButton_{{ recipe.id }}" class="btn btn-primary" onclick="shareRecipe({{ recipe.id }})">
+                                {% if recipe.shared %}Unshare{% else %}Share{% endif %}
+                            </button>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<!-- Toast Notification Styles -->
+<style>
+
+   .recipe-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Adjust spacing between the buttons */ 
+    position: relative; top: 10px; 
+    }
+
+    .recipe-actions .btn-view-recipe {
+        background-color: #4CAF50; /* Example: Green */
+        border-color: #4CAF50;
+        color: white; /* Text color */
+    }
+    .recipe-actions .btn-view-recipe:hover {
+        background-color: #7ccd39; /* Darker green on hover */
+        
+    }
+    
+    .toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        z-index: 9999;
+    }
+
+    .toast.show {
+        opacity: 1;
+    }
+</style>
+
+<script>
+    function shareRecipe(recipeId) {
+        const csrfToken = '{{ csrf_token }}';  // Access the CSRF token directly
+
+        // Log CSRF token and recipe ID for debugging
+        console.log('CSRF Token:', csrfToken);
+        console.log('Recipe ID:', recipeId);
+
+        fetch(`/toggle_share_recipe/${recipeId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken  // Pass CSRF token for POST request
+            },
+            body: JSON.stringify({
+                'recipe_id': recipeId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);  // Log the response for debugging
+            if (data.success) {
+                var shareButton = document.getElementById('shareButton_' + recipeId);  // Dynamically get the correct button
+                if (data.shared) {
+                    shareButton.textContent = 'Unshare';  // Change to Unshare if shared
+                    showToast('Recipe shared successfully!');
+                } else {
+                    shareButton.textContent = 'Share';  // Change to Share if not shared
+                    showToast('Recipe unshared successfully!');
+                }
+                
+                // Optionally, update other elements dynamically without a full page reload
+                // For example, update the recipe details without redirecting
+                updateRecipeDetailPage(data);  // This is a function you can create for updating specific parts of the page
+            } else {
+                showToast(data.message);  // Show error message
+            }
+        })
+        .catch(error => {
+            console.error('An error occurred:', error);  // Log any errors
+            showToast('An error occurred: ' + error);
+        });
+    }
+
+    // Function to show the toast notification
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'toast show';
+        toast.innerText = message;
+        document.body.appendChild(toast);
+
+        // Remove toast after 3 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 500);  // Remove from DOM after animation
+        }, 3000);
+    }
+
+    // Function to update recipe details dynamically (optional)
+    function updateRecipeDetailPage(data) {
+        // Example: You can dynamically update parts of the page like recipe share status or other information
+        // This will depend on the specific elements in your template
+        const shareStatusElement = document.getElementById('recipeShareStatus');
+        if (shareStatusElement) {
+            shareStatusElement.innerText = data.shared ? 'Shared' : 'Not Shared';
+        }
+    }
+</script>
+
+
+
+{% endblock %}

@@ -1,0 +1,99 @@
+/* General styling for the page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Sidebar styling */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 20%;
+    background-color: #f8f9fa;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    gap: 10px;
+}
+
+.sidebar .nav-item {
+    margin-bottom: 10px;
+}
+
+.sidebar .nav-link {
+    font-size: 1.1rem;
+    color: #333;
+    text-decoration: none;
+}
+
+.sidebar .nav-link:hover {
+    color: #0056b3;
+}
+
+/* Main content area (80% width) */
+main {
+    margin-left: 20%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Box with background image */
+.bg-image-box {
+    background-image: url('path_to_your_image.jpg'); /* Add your background image URL here */
+    background-size: cover;
+    background-position: center;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    margin-top: 0; /* Ensure no extra space at the top */
+}
+
+.bg-image-box h2 {
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+.bg-image-box p {
+    font-size: 1.3rem;
+    margin-top: 10px;
+}
+
+.bg-image-box .btn {
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    margin-top: 20px;
+}
+
+/* Remove gap between sidebar and main content */
+.main-layout {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        padding-top: 10px;
+    }
+    main {
+        margin-left: 0;
+    }
+    .bg-image-box h2 {
+        font-size: 2rem;
+    }
+    .bg-image-box p {
+        font-size: 1rem;
+    }
+}

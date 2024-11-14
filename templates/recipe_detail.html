@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ recipe.title }} - RecipeHub{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+
+        <!-- Back Button -->
+        <div class="col-12 mb-3">
+            {% if from_page == 'fav' %}
+                <!-- If the user came from the Fav Recipe page, link back to the Fav Recipe page -->
+                <a href="{% url 'favorite_recipes' %}" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Back to Favorite Recipes
+                </a>
+            {% elif from_page == 'foodie_club' %}
+                <!-- If the user came from the Foodie Club page, link back to the Foodie Club page -->
+                <a href="{% url 'foodie_club' %}" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Back to Foodie Club
+                </a>
+            {% else %}
+                <!-- Otherwise, link back to the My Recipes page -->
+                <a href="{% url 'my_recipes' %}" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Back to My Recipes
+                </a>
+            {% endif %}
+        </div>
+
+
+
+        <div class="col-md-6" style="position: relative;  top: -10px;">
+            <!-- Recipe Image with fixed size and blurred background -->
+            <div class="image-container" style="position: relative; height: 550px;">
+                {% if recipe.recipe_image %}
+                    <img src="{{ recipe.recipe_image.url }}" class="img-fluid blur-background" alt="Recipe Image" style="width: 100%; height: 100%; object-fit: cover;">
+                {% else %}
+                    <img src="{% static 'images/placeholder.jpg' %}" class="img-fluid blur-background" alt="No Image Available" style="width: 100%; height: 100%; object-fit: cover;">
+                {% endif %}
+                <!-- Transparent Overlay -->
+                <div class="overlay"></div>
+            </div>
+        </div>
+        
+        <div class="col-md-6" style="position: relative; top: -10px;">
+            <h2 class="mb-3">{{ recipe.title }}</h2>
+            <p class="lead">{{ recipe.description }}</p>
+            
+            <hr>
+            <h5>Ingredients:</h5>
+            <p>{{ recipe.ingredients }}</p>
+
+            <h5>Steps:</h5>
+            <p>{{ recipe.instructions }}</p>
+
+            <div class="mt-4">
+                <!-- Favorite Button (Only visible on my_recipes or fav_recipe pages) -->
+                {% if from_page == 'my_recipes' or from_page == 'fav_recipe' and not recipe.shared %}
+                <form method="POST" action="{% url 'toggle_favorite' recipe.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn 
+                        {% if recipe.favorite %}btn-success{% else %}btn-outline-secondary{% endif %}">
+                        Favourite
+                    </button>
+                </form>
+                {% endif %}
+            
+                <!-- Update and Delete Buttons (Only for the owner of the recipe, and if not shared) -->
+                {% if from_page == 'my_recipes' or from_page == 'fav_recipe' and not recipe.shared and recipe.user == user %}
+                    <a href="{% url 'update_recipe' recipe.id %}" class="btn btn-warning">Update</a>
+                    <a href="{% url 'delete_recipe' recipe.id %}" class="btn btn-danger">Delete</a>
+                {% endif %}
+            </div>
+            
+            
+            
+            
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Apply blur effect to the image */
+    .blur-background {
+        filter: blur(10px);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
+
+    /* Create a transparent overlay */
+    .image-container {
+        position: relative;
+        height: 550px;
+    }
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* semi-transparent dark overlay */
+        z-index: 1;
+    }
+</style>
+{% endblock %}

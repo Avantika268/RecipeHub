@@ -1,0 +1,405 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecipeHub - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+    <style>
+        /* Resetting margin and padding for body and html */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+/* Ensuring container takes up full width and height */
+.container-fluid {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%; /* Ensures full width */
+    margin: 0;
+    padding: 0;
+}
+
+/* Header section */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    height: 15vh;
+    background-color: #030520;
+}
+
+.logo {
+    font-family: 'Poppins', sans-serif; /* Apply the custom font */
+    font-size: 2rem;  /* Adjust the font size */
+    font-weight: bold;
+    color: #e9dfdf;
+    margin-right: 40px;
+    margin-left: 20px; /* Add left margin for spacing */
+    display: flex;
+    align-items: center;
+}
+
+.logo svg {
+    width: 30px;  /* Adjust the icon size */
+    height: 30px;
+    margin-right: 10px; /* Space between the logo text and icon */
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    margin: 0 auto;
+}
+
+.search-bar {
+    flex: 1; /* Makes the search bar take up available space */
+}
+
+#searchButton {
+    margin-left: 10px; /* Adds space between the input and button */
+    white-space: nowrap; /* Prevents text wrapping inside the button */
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #ebbb43;
+}
+
+/* Main layout with sidebar and content box */
+.main-layout {
+    display: flex;
+    flex-grow: 1;
+    width: 100%; /* Ensures full width */
+    height: calc(100vh - 15vh); /* Remaining height after header */
+    align-items: flex-start; /* Align items at the top */
+}
+
+/* Sidebar section */
+.sidebar {
+    background-color: #092e2e;
+    padding-top: 20px;
+    width: 300px;
+    height: 100vh;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar .nav-item {
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar .nav-item:hover {
+    background-color: #39566c;
+}
+
+.sidebar .nav-link {
+    color: #f2f5f8;
+    font-size: 20px;
+    margin-left: 10px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.sidebar .nav-link:hover {
+    color: #ffd700;
+}
+
+.sidebar svg {
+    transition: fill 0.3s ease;
+}
+
+.sidebar svg:hover {
+    fill: #ffd700;
+}
+
+/* Active link styling */
+.nav-link.active {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+/* Icon and text alignment */
+.sidebar .nav-item svg {
+    flex-shrink: 0;
+}
+
+/* Content box section */
+.content-box {
+    width: 100%; /* Ensure it takes full width */
+    height: 100%; /* Ensure it takes full height */
+    background-image: url("{% static 'images/mainpage.png' %}");
+    background-size: cover; /* Ensures the image covers the entire box */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents tiling of the image */
+    background-attachment: fixed; /* Optional: for parallax effect */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0; /* Ensure no padding affects layout */
+    margin: 0; /* Ensure no margin affects layout */
+    box-sizing: border-box; /* Ensures padding doesn't affect width/height */
+    position: relative; /* Position relative to place the overlay */
+}
+
+.content-box::before {
+    content: ""; /* Empty content */
+    position: absolute; /* Absolute positioning to cover the entire area */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Black overlay with 50% opacity */
+    z-index: 1; /* Ensures overlay is behind the text */
+}
+
+.content-box > * {
+    z-index: 2; /* Ensures text stays above the overlay */
+}
+
+/* For consistent height and alignment with header */
+.main-layout > * {
+    height: 100%;
+}
+
+.content-box h1 {
+    font-size: 3rem; /* Increase size of h1 */
+    line-height: 1.2; /* Adjust line spacing if needed */
+}
+
+.content-box p {
+    font-size: 1.5rem; /* Increase size of p */
+    line-height: 1.6; /* Adjust line spacing */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1024px) {
+    .header {
+        padding: 0 0.5rem;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+    }
+
+    .search-container {
+        width: 60%;
+    }
+
+    .user-info {
+        flex-direction: row;
+    }
+
+    .sidebar {
+        width: 250px;
+    }
+
+    .content-box h1 {
+        font-size: 2.5rem;
+    }
+
+    .content-box p {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%; /* Make sidebar take full width on smaller screens */
+        height: auto; /* Adjust height for smaller screens */
+        position: static; /* Remove fixed position */
+    }
+
+    .content-box {
+        width: 100%; /* Ensure full width */
+        height: auto; /* Adjust height */
+    }
+
+    .search-container {
+        width: 100%;
+    }
+
+    .search-bar {
+        width: 80%;
+    }
+
+    .header {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 20vh; /* Adjust height for mobile */
+    }
+
+    .logo {
+        margin-bottom: 10px;
+    }
+
+    .user-info {
+        display: none; /* Hide user info section for mobile */
+    }
+
+    .content-box h1 {
+        font-size: 2rem;
+    }
+
+    .content-box p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        height: 18vh; /* Adjust header height on very small screens */
+    }
+
+    .logo {
+        font-size: 1.2rem;
+    }
+
+    .search-container {
+        width: 80%;
+    }
+
+    .sidebar {
+        display: none; /* Hide sidebar for very small screens */
+    }
+
+    .content-box h1 {
+        font-size: 1.5rem;
+    }
+
+    .content-box p {
+        font-size: 0.9rem;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="header">
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cup-hot-fill" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M.5 6a.5.5 0 0 0-.488.608l1.652 7.434A2.5 2.5 0 0 0 4.104 16h5.792a2.5 2.5 0 0 0 2.44-1.958l.131-.59a3 3 0 0 0 1.3-5.854l.221-.99A.5.5 0 0 0 13.5 6zM13 12.5a2 2 0 0 1-.316-.025l.867-3.898A2.001 2.001 0 0 1 13 12.5"/>
+                <path d="m4.4.8-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 3.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 3.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 3 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 4.4.8m3 0-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 6.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 6.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 6 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 7.4.8m3 0-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.252.382l-.019.025-.005.008-.002.002A.5.5 0 0 1 9.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 9.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 9 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 10.4.8"/>
+            </svg> 
+            RecipeHub
+        </div>
+        
+        <div class="search-container"> 
+            <form method="GET" action="{% url 'search_recipes' %}" style="width: 100%; display: flex;">
+                <input class="form-control search-bar" type="search" name="query" placeholder="Search recipes..." aria-label="Search" id="searchInput">
+                <button type="submit" class="btn btn-primary ms-2" id="searchButton">Search</button>
+            </form>
+        </div>
+        
+        
+       
+
+        
+        <div class="user-info">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#f2f5f8" class="bi bi-person-circle" viewBox="0 0 16 16"   style="position: relative;  top: 15px;">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+            </svg>
+            <p  style="position: relative;  top: 15px;">Welcome, {{ user.username }}!</p>
+           
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" style="height: 30px; width: 100px;">Logout</button>
+                    </form>
+               
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <nav class="sidebar">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#f2f5f8" class="bi bi-house" viewBox="0 0 16 16">
+                        <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+                      </svg>
+                    <a class="nav-link active" href="{% url 'main' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#f2f5f8" class="bi bi-journal-plus" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5"/>
+                        <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
+                        <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"/>
+                      </svg>
+                    <a class="nav-link" href="{% url 'create_recipe' %}">Create Recipe</a>
+                </li>
+                <li class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#f2f5f8" class="bi bi-cup-straw" viewBox="0 0 16 16">
+                        <path d="M13.902.334a.5.5 0 0 1-.28.65l-2.254.902-.4 1.927c.376.095.715.215.972.367.228.135.56.396.56.82q0 .069-.011.132l-.962 9.068a1.28 1.28 0 0 1-.524.93c-.488.34-1.494.87-3.01.87s-2.522-.53-3.01-.87a1.28 1.28 0 0 1-.524-.93L3.51 5.132A1 1 0 0 1 3.5 5c0-.424.332-.685.56-.82.262-.154.607-.276.99-.372C5.824 3.614 6.867 3.5 8 3.5c.712 0 1.389.045 1.985.127l.464-2.215a.5.5 0 0 1 .303-.356l2.5-1a.5.5 0 0 1 .65.278M9.768 4.607A14 14 0 0 0 8 4.5c-1.076 0-2.033.11-2.707.278A3.3 3.3 0 0 0 4.645 5c.146.073.362.15.648.222C5.967 5.39 6.924 5.5 8 5.5c.571 0 1.109-.03 1.588-.085zm.292 1.756C9.445 6.45 8.742 6.5 8 6.5c-1.133 0-2.176-.114-2.95-.308a6 6 0 0 1-.435-.127l.838 8.03c.013.121.06.186.102.215.357.249 1.168.69 2.438.69s2.081-.441 2.438-.69c.042-.029.09-.094.102-.215l.852-8.03a6 6 0 0 1-.435.127 9 9 0 0 1-.89.17zM4.467 4.884s.003.002.005.006zm7.066 0-.005.006zM11.354 5a3 3 0 0 0-.604-.21l-.099.445.055-.013c.286-.072.502-.149.648-.222"/>
+                      </svg>
+                    <a class="nav-link" href="{% url 'my_recipes' %}">My Recipes</a>
+                </li>
+                <li class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#f2f5f8" class="bi bi-chat-square-heart-fill" viewBox="0 0 16 16">
+                        <path d="M2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6 3.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132"/>
+                      </svg>
+                    <a class="nav-link" href="{% url 'favorite_recipes' %}">Fav Recipes</a>
+                </li>
+
+                <li class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#f2f5f8" class="bi bi-people-fill" viewBox="0 0 16 16">
+                        <path d="M8 10a3 3 0 1 0-2.829-4h5.658A3 3 0 1 0 8 10z"/>
+                        <path d="M8 11.5c1.379 0 2.631-.456 3.608-1.216A4.973 4.973 0 0 1 12.9 12a.5.5 0 0 1 .6.8c-.63.712-1.426 1.2-2.5 1.2h-5a3.533 3.533 0 0 1-2.5-1.2.5.5 0 0 1 .6-.8c.53-.495 1.193-.873 1.892-1.084A4.978 4.978 0 0 1 8 11.5z"/>
+                    </svg>
+                    <a class="nav-link" href="{% url 'foodie_club' %}">Foodie Club</a>
+                </li>
+                
+                
+                <li class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#f2f5f8" class="bi bi-telephone-fill" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/>
+                      </svg>
+                    <a class="nav-link" href="{% url 'contact_us' %}">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#f2f5f8" class="bi bi-person-check" viewBox="0 0 16 16">
+                        <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                        <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+                      </svg>
+                    <a class="nav-link" href="{% url 'my_profile' %}">My Profile</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="content-box">
+            <h1>Welcome to RecipeHub</h1>
+            <p>Ready to cook up some magic? Start creating and sharing your most delicious recipes today! </p>
+            <p>Just click the "Create Recipe" button below to get started with your very own recipe.</p>
+            <a href="{% url 'create_recipe' %}" class="btn btn-primary">Create Recipe</a>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

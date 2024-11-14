@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Foodie Club - RecipeHub{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Back Button -->
+    <div class="mb-4" style="position: relative; left: -100px; top: -20px;">
+        <a href="{% url 'main' %}" class="btn" style="background-color: white; width: 150px; color: black;">Back</a>
+    </div>
+    <h2 class="text-center mb-4" style="position: relative;  top: -50px;">Foodie Club</h2>
+
+    <div class="row" style="position: relative; top: -40px;">
+        {% if foodie_club_recipes %}
+            {% for recipe in foodie_club_recipes %}
+            <div class="col-md-4 mb-4">
+                <div class="card" style="height: 100%; display: flex; flex-direction: column;">
+                    
+                    {% if recipe.recipe_image %}
+                        <img src="{{ recipe.recipe_image.url }}" class="card-img-top" alt="Recipe Image" style="max-height: 200px; object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'images/placeholder.jpg' %}" class="card-img-top" alt="No Image Available" style="max-height: 200px; object-fit: cover;">
+                    {% endif %}
+
+                    <div class="card-body" style="flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h5 class="card-title">{{ recipe.title }}</h5>
+                            <p class="card-text">{{ recipe.description }}</p>
+                            <p><strong>Shared by:</strong> <span class="text-muted">{{ recipe.user.username }}</span></p>
+
+                        </div>
+
+                        <div class="recipe-actions">
+                            <a href="{% url 'recipe_detail' recipe.id %}?from=foodie_club"" class="btn btn-primary">View Recipe</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No recipes shared yet!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
